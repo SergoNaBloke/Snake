@@ -13,6 +13,8 @@ let running = false;
 let gameTimerId;
 let xVelocity = unitSize;
 let yVelocity = 0;
+let nextXVelocity = xVelocity;
+let nextYVelocity = yVelocity;
 let foodX;
 let foodY;
 let score = 0;
@@ -79,6 +81,8 @@ function drawFood() {
 }
 
 function moveSnake() {
+  yVelocity = nextYVelocity;
+  xVelocity = nextXVelocity;
   const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
   snake.unshift(head);
   // if food is eaten
@@ -119,23 +123,23 @@ function changeDirection(event) {
 
   switch (true) {
     case (keyPressed == LEFT_ARROW || keyPressed == KEY_A) && !goingRight:
-      xVelocity = -unitSize;
-      yVelocity = 0;
+      nextXVelocity = -unitSize;
+      nextYVelocity = 0;
       break;
     case (keyPressed == UP_ARROW || keyPressed == KEY_W) && !goingDown:
-      xVelocity = 0;
-      yVelocity = -unitSize;
+      nextXVelocity = 0;
+      nextYVelocity = -unitSize;
       break;
     case (keyPressed == RIGHT_ARROW || keyPressed == KEY_D) && !goingLeft:
-      xVelocity = unitSize;
-      yVelocity = 0;
+      nextXVelocity = unitSize;
+      nextYVelocity = 0;
       break;
     case (keyPressed == DOWN_ARROW || keyPressed == KEY_S) && !goingUp:
-      xVelocity = 0;
-      yVelocity = unitSize;
+      nextXVelocity = 0;
+      nextYVelocity = unitSize;
       break;
     default:
-      return; // do nothing if the key pressed is not one of the arrow keys
+      return;
   }
 }
 
