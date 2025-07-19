@@ -8,6 +8,8 @@ html {
   --bg-color: #f5f5f5ff;
   --text-color: #111111;
   --bg-header-color: #d8d8d8;
+  --bnt-color: rgb(216, 216, 216);
+  --bnt-color-hover: rgb(200, 200, 200);
 
   --board-bg: #ffffff;
   --board-border: #cccccc;
@@ -20,6 +22,8 @@ html {
   --bg-color: #121212;
   --text-color: rgb(230, 230, 230);
   --bg-header-color: #303030;
+  --bnt-color: rgb(48, 48, 48);
+  --bnt-color-hover: rgb(55, 55, 55);
 
   --board-bg: #222222;
   --board-border: #3d3d3d;
@@ -96,7 +100,7 @@ body {
 button {
   color: var(--text-color);
   /* background: none; */
-  background-color: var(--bg-header-color);
+  background-color: var(--bnt-color);
   font-size: 2rem;
   width: 8rem;
   height: 4rem;
@@ -106,5 +110,5 @@ button {
 }
 
 button:hover {
-  background-color: var(--board-bg);
+  background-color: var(--bnt-color-hover);
 }
