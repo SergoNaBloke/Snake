@@ -44,18 +44,19 @@ function gameStart() {
 }
 
 function nextTick() {
-  if (running) {
-    gameTimerId = setTimeout(() => {
-      moveSnake();
+  gameTimerId = setTimeout(() => {
+    moveSnake();
+    checkGameOver();
+
+    if (running) {
       clearBoard();
       drawFood();
       drawSnake();
-      checkGameOver();
       nextTick();
-    }, 500);
-  } else {
-    displayGameOver();
-  }
+    } else {
+      displayGameOver();
+    }
+  }, 500);
 }
 
 function clearBoard() {
