@@ -19,7 +19,7 @@ html {
 :root[data-theme='dark'] {
   --bg-color: #121212;
   --text-color: rgb(230, 230, 230);
-  --bg-header-color: #202020;
+  --bg-header-color: #303030;
 
   --board-bg: #222222;
   --board-border: #3d3d3d;
@@ -97,10 +97,14 @@ button {
   color: var(--text-color);
   /* background: none; */
   background-color: var(--bg-header-color);
-  font-size: 3rem;
-  width: 10rem;
-  height: 5rem;
-  /* border: 0.25rem solid; */
+  font-size: 2rem;
+  width: 8rem;
+  height: 4rem;
+  border: 0rem solid;
   border-radius: 1.5rem;
   cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--board-bg);
 }

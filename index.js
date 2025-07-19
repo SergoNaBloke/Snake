@@ -8,11 +8,18 @@ themeToggle.addEventListener('click', () => {
   const newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
   root.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
+
+  clearBoard();
+  drawFood();
+  drawSnake();
+  checkGameOver();
+  if (!running) {
+    displayGameOver();
+  }
 });
 
-const rootStyles = getComputedStyle(document.documentElement);
 function cssVar(name) {
-  return rootStyles.getPropertyValue(name).trim();
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
 const gameboard = document.querySelector('#gameBoard');
@@ -21,10 +28,6 @@ const scoreText = document.querySelector('#scoreText');
 const resetBtn = document.querySelector('#resetBtn');
 const gameWidth = gameboard.width;
 const gameHeight = gameboard.height;
-const boardBackground = cssVar('--board-bg');
-const snakeColor = cssVar('--snake-color');
-const snakeBorder = cssVar('--snake-border');
-const foodColor = cssVar('--food-color');
 const unitSize = 25;
 let running = false;
 let gameTimerId;
@@ -80,7 +83,7 @@ function nextTick() {
 }
 
 function clearBoard() {
-  ctx.fillStyle = boardBackground;
+  ctx.fillStyle = cssVar('--board-bg');
   ctx.fillRect(0, 0, gameWidth, gameHeight);
 }
 
@@ -104,7 +107,7 @@ function createFood() {
 }
 
 function drawFood() {
-  ctx.fillStyle = foodColor;
+  ctx.fillStyle = cssVar('--food-color');
   ctx.fillRect(foodX, foodY, unitSize, unitSize);
 }
 
@@ -124,8 +127,8 @@ function moveSnake() {
 }
 
 function drawSnake() {
-  ctx.fillStyle = snakeColor;
-  ctx.strokeStyle = snakeBorder;
+  ctx.fillStyle = cssVar('--snake-color');
+  ctx.strokeStyle = cssVar('--snake-border');
   snake.forEach((snakePart) => {
     ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
     ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
