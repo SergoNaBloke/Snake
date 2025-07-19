@@ -72,8 +72,18 @@ function createFood() {
     const randomNum = Math.round((Math.random() * (max - min) + min) / unitSize) * unitSize;
     return randomNum;
   }
-  foodX = randomFood(0, gameWidth - unitSize);
-  foodY = randomFood(0, gameHeight - unitSize);
+
+  let newX, newY;
+
+  // Генерируем до тех пор, пока не найдём свободную клетку
+  do {
+    newX = randomFood(0, gameWidth - unitSize);
+    newY = randomFood(0, gameHeight - unitSize);
+    // snake.some вернёт true, если хоть один сегмент совпадает с (newX, newY)
+  } while (snake.some(segment => segment.x === newX && segment.y === newY));
+
+  foodX = newX;
+  foodY = newY;
 }
 
 function drawFood() {
