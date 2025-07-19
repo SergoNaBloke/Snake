@@ -4,57 +4,103 @@ html {
   font-family: 'Roboto', sans-serif;
 }
 
+:root {
+  --bg-color: #f5f5f5ff;
+  --text-color: #111111;
+  --bg-header-color: #d8d8d8;
+
+  --board-bg: #ffffff;
+  --board-border: #cccccc;
+  --snake-color: lightgreen;
+  --snake-border: black;
+  --food-color: red;
+}
+
+:root[data-theme='dark'] {
+  --bg-color: #121212;
+  --text-color: rgb(230, 230, 230);
+  --bg-header-color: #202020;
+
+  --board-bg: #222222;
+  --board-border: #3d3d3d;
+  --snake-color: #4caf50;
+  --snake-border: #000000;
+  --food-color: #ff5722;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: inherit;
-  /* box-sizing: border-box; */
   margin: 0;
   padding: 0;
-  /* border: 1px solid red; */
 }
 
 body {
-  line-height: 1.5;
-  color: #111;
-  background-color: #f5f5f5;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.gameHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-header-color);
 }
 
 #gameContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* text-align: center; */
-  /* align-content: center; */
-  /* justify-content: center; */
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
+  gap: 2rem;
 }
 
 #gameBoard {
-  border: 0.25rem solid black;
-  background-color: #f5f5f5;
-
+  border: 0.25rem solid var(--board-border);
+  background-color: var(--board-bg);
   align-self: center;
-
   display: block;
-  margin: 1rem auto;
-
+  margin: 0rem auto;
+  max-width: 100%;
   /* width: 800px;
   height: 800px; */
 }
 
 #scoreText {
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
-#resetBtn {
+/* #resetBtn {
+  font-size: 2rem;
+  width: 10rem;
+  height: 5rem;
+  border: 0.25rem solid;
+  border-radius: 1.5rem;
+  cursor: pointer;
+} */
+
+/* #themeToggle {
   font-size: 3rem;
   width: 10rem;
   height: 5rem;
   border: 0.25rem solid;
+  border-radius: 1.5rem;
+  cursor: pointer;
+} */
+
+button {
+  color: var(--text-color);
+  /* background: none; */
+  background-color: var(--bg-header-color);
+  font-size: 3rem;
+  width: 10rem;
+  height: 5rem;
+  /* border: 0.25rem solid; */
   border-radius: 1.5rem;
   cursor: pointer;
 }

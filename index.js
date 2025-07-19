@@ -1,13 +1,30 @@
+const themeToggle = document.querySelector('#themeToggle');
+const root = document.documentElement;
+
+const currentTheme = localStorage.getItem('theme') || 'light';
+root.setAttribute('data-theme', currentTheme);
+
+themeToggle.addEventListener('click', () => {
+  const newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  root.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+});
+
+const rootStyles = getComputedStyle(document.documentElement);
+function cssVar(name) {
+  return rootStyles.getPropertyValue(name).trim();
+}
+
 const gameboard = document.querySelector('#gameBoard');
 const ctx = gameboard.getContext('2d');
 const scoreText = document.querySelector('#scoreText');
 const resetBtn = document.querySelector('#resetBtn');
 const gameWidth = gameboard.width;
 const gameHeight = gameboard.height;
-const boardBackground = 'white';
-const snakeColor = 'lightgreen';
-const snakeBorder = 'black';
-const foodColor = 'red';
+const boardBackground = cssVar('--board-bg');
+const snakeColor = cssVar('--snake-color');
+const snakeBorder = cssVar('--snake-border');
+const foodColor = cssVar('--food-color');
 const unitSize = 25;
 let running = false;
 let gameTimerId;
@@ -39,7 +56,7 @@ gameStart();
 function gameStart() {
   running = true;
   scoreText.textContent = score;
-  clearBoard()
+  clearBoard();
   createFood();
   drawFood();
   drawSnake();
@@ -80,7 +97,7 @@ function createFood() {
     newX = randomFood(0, gameWidth - unitSize);
     newY = randomFood(0, gameHeight - unitSize);
     // snake.some вернёт true, если хоть один сегмент совпадает с (newX, newY)
-  } while (snake.some(segment => segment.x === newX && segment.y === newY));
+  } while (snake.some((segment) => segment.x === newX && segment.y === newY));
 
   foodX = newX;
   foodY = newY;
@@ -178,7 +195,7 @@ function checkGameOver() {
 
 function displayGameOver() {
   ctx.font = '50px MV Boli';
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = cssVar('--text-color');
   ctx.textAlign = 'center';
   ctx.fillText('GAME OVER!', gameWidth / 2, gameHeight / 2);
   running = false;
