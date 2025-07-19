@@ -94,10 +94,15 @@ function drawSnake() {
 
 function changeDirection(event) {
   const keyPressed = event.keyCode;
-  const LEFT = 37;
-  const UP = 38;
-  const RIGHT = 39;
-  const DOWN = 40;
+  const LEFT_ARROW = 37;
+  const UP_ARROW = 38;
+  const RIGHT_ARROW = 39;
+  const DOWN_ARROW = 40;
+
+  const KEY_A = 65;
+  const KEY_W = 87;
+  const KEY_D = 68;
+  const KEY_S = 83;
 
   const goingUp = yVelocity == -unitSize;
   const goingDown = yVelocity == unitSize;
@@ -105,19 +110,19 @@ function changeDirection(event) {
   const goingLeft = xVelocity == -unitSize;
 
   switch (true) {
-    case keyPressed == LEFT && !goingRight:
+    case (keyPressed == LEFT_ARROW || keyPressed == KEY_A) && !goingRight:
       xVelocity = -unitSize;
       yVelocity = 0;
       break;
-    case keyPressed == UP && !goingDown:
+    case (keyPressed == UP_ARROW || keyPressed == KEY_W) && !goingDown:
       xVelocity = 0;
       yVelocity = -unitSize;
       break;
-    case keyPressed == RIGHT && !goingLeft:
+    case (keyPressed == RIGHT_ARROW || keyPressed == KEY_D) && !goingLeft:
       xVelocity = unitSize;
       yVelocity = 0;
       break;
-    case keyPressed == DOWN && !goingUp:
+    case (keyPressed == DOWN_ARROW || keyPressed == KEY_S) && !goingUp:
       xVelocity = 0;
       yVelocity = unitSize;
       break;
