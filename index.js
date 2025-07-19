@@ -39,6 +39,7 @@ gameStart();
 function gameStart() {
   running = true;
   scoreText.textContent = score;
+  clearBoard()
   createFood();
   drawFood();
   drawSnake();
