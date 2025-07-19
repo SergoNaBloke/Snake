@@ -39,15 +39,16 @@ function gameStart() {
   scoreText.textContent = score;
   createFood();
   drawFood();
+  drawSnake();
   nextTick();
 }
 
 function nextTick() {
   if (running) {
     gameTimerId = setTimeout(() => {
+      moveSnake();
       clearBoard();
       drawFood();
-      moveSnake();
       drawSnake();
       checkGameOver();
       nextTick();
@@ -180,5 +181,6 @@ function resetGame() {
     { x: unitSize * 1, y: 0 },
     { x: 0, y: 0 },
   ];
+  clearBoard();
   gameStart();
 }
