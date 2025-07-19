@@ -25,6 +25,11 @@ let snake = [
 ];
 
 window.addEventListener('keydown', changeDirection);
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
+    resetGame();
+  }
+});
 resetBtn.addEventListener('click', resetGame);
 
 gameStart();
@@ -164,7 +169,7 @@ function displayGameOver() {
 
 function resetGame() {
   clearTimeout(gameTimerId);
-  
+
   score = 0;
   xVelocity = unitSize;
   yVelocity = 0;
