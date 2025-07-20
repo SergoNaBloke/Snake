@@ -1,6 +1,7 @@
 html {
   box-sizing: border-box;
-  font-size: clamp(0.875rem, 0.7679rem + 0.5357vw, 1.25rem);
+  /* font-size: clamp(0.875rem, 0.7679rem + 0.5357vw, 1.25rem); */
+  font-size: clamp(0.75rem, 0.5417rem + 0.9259vw, 1.375rem);
   font-family: 'Roboto', sans-serif;
 }
 
@@ -105,12 +106,27 @@ body {
 
 #controlButtonsWrapper {
   gap: 1rem;
+  display: none;
+  align-items: center;
 }
 
-#controlButtonsWrapper button {
-  font-size: 4rem;
+#verticalButtonsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dirrectionBtn {
+  font-size: 6rem;
   line-height: 100%;
   background: none;
   border: 0rem solid transparent;
   cursor: pointer;
+}
+
+@media (pointer: coarse) and (hover: none) {
+  #controlButtonsWrapper {
+    display: flex;
+  }
 }
