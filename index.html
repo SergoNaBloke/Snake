@@ -14,8 +14,16 @@
     </header>
     <div id="gameContainer">
       <canvas id="gameBoard" width="500" height="500"></canvas>
-      <button id="resetBtn">Reset</button>
-      <button id="themeToggle" aria-label="Toggle theme">🌓</button>
+      <div id="bottomButtonsWrapper">
+        <button id="resetBtn" class="buttonStyleOne">Reset</button>
+        <button id="themeToggle" class="buttonStyleOne" aria-label="Toggle theme">🌓</button>
+      </div>
+      <div id="controlButtonsWrapper">
+        <button class="dir-btn" data-dir="up">⬆️</button>
+        <button class="dir-btn" data-dir="down">⬇️</button>
+        <button class="dir-btn" data-dir="left">⬅️</button>
+        <button class="dir-btn" data-dir="right">➡️</button>
+      </div>
     </div>
   </body>
 

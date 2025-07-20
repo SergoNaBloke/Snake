@@ -35,7 +35,7 @@ html {
 *,
 *::before,
 *::after {
-  box-sizing: inherit;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
@@ -53,6 +53,10 @@ body {
   background-color: var(--bg-header-color);
 }
 
+#scoreText {
+  font-size: 3rem;
+}
+
 #gameContainer {
   display: flex;
   flex-direction: column;
@@ -61,7 +65,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 #gameBoard {
@@ -75,40 +79,38 @@ body {
   height: 800px; */
 }
 
-#scoreText {
-  font-size: 3rem;
+#bottomButtonsWrapper {
+  width: calc(500px + 0.5rem);
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  /* gap: 1rem; */
 }
 
-/* #resetBtn {
-  font-size: 2rem;
-  width: 10rem;
-  height: 5rem;
-  border: 0.25rem solid;
-  border-radius: 1.5rem;
-  cursor: pointer;
-} */
-
-/* #themeToggle {
-  font-size: 3rem;
-  width: 10rem;
-  height: 5rem;
-  border: 0.25rem solid;
-  border-radius: 1.5rem;
-  cursor: pointer;
-} */
-
-button {
-  color: var(--text-color);
-  /* background: none; */
-  background-color: var(--bnt-color);
+#bottomButtonsWrapper button {
   font-size: 2rem;
   width: 8rem;
   height: 4rem;
-  border: 0rem solid;
+  color: var(--text-color);
+  background-color: var(--bnt-color);
+  border: 0rem solid transparent;
   border-radius: 1.5rem;
   cursor: pointer;
 }
 
-button:hover {
+#bottomButtonsWrapper button:hover {
   background-color: var(--bnt-color-hover);
+}
+
+#controlButtonsWrapper {
+  gap: 1rem;
+}
+
+#controlButtonsWrapper button {
+  font-size: 4rem;
+  line-height: 100%;
+  background: none;
+  border: 0rem solid transparent;
+  cursor: pointer;
 }
