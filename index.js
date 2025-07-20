@@ -210,6 +210,8 @@ function resetGame() {
   score = 0;
   xVelocity = unitSize;
   yVelocity = 0;
+  nextXVelocity = xVelocity;
+  nextYVelocity = yVelocity;
   snake = [
     { x: unitSize * 4, y: 0 },
     { x: unitSize * 3, y: 0 },
