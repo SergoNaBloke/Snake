@@ -47,6 +47,18 @@ let snake = [
 ];
 
 window.addEventListener('keydown', changeDirection);
+document.querySelectorAll('.dirrectionBtn').forEach((btn) => {
+  // click для мыши, touchstart для тача
+  btn.addEventListener('click', touchDirectionHandler);
+  btn.addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault(); // чтобы не сработал клик-мокап через мышь
+      touchDirectionHandler(e);
+    },
+    { passive: false },
+  );
+});
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
     resetGame();
@@ -135,42 +147,65 @@ function drawSnake() {
   });
 }
 
+function setDirection(desiredX, desiredY) {
+  const goingUp = yVelocity === -unitSize;
+  const goingDown = yVelocity === unitSize;
+  const goingRight = xVelocity === unitSize;
+  const goingLeft = xVelocity === -unitSize;
+
+  // запрет на разворот на 180°
+  if (
+    (desiredX === -unitSize && goingRight) ||
+    (desiredX === unitSize && goingLeft) ||
+    (desiredY === -unitSize && goingDown) ||
+    (desiredY === unitSize && goingUp)
+  ) {
+    return;
+  }
+
+  nextXVelocity = desiredX;
+  nextYVelocity = desiredY;
+}
+
 function changeDirection(event) {
-  const keyPressed = event.keyCode;
-  const LEFT_ARROW = 37;
-  const UP_ARROW = 38;
-  const RIGHT_ARROW = 39;
-  const DOWN_ARROW = 40;
-
-  const KEY_A = 65;
-  const KEY_W = 87;
-  const KEY_D = 68;
-  const KEY_S = 83;
-
-  const goingUp = yVelocity == -unitSize;
-  const goingDown = yVelocity == unitSize;
-  const goingRight = xVelocity == unitSize;
-  const goingLeft = xVelocity == -unitSize;
-
-  switch (true) {
-    case (keyPressed == LEFT_ARROW || keyPressed == KEY_A) && !goingRight:
-      nextXVelocity = -unitSize;
-      nextYVelocity = 0;
+  const key = event.keyCode;
+  switch (key) {
+    case 37: // ←
+    case 65: // A
+      setDirection(-unitSize, 0);
       break;
-    case (keyPressed == UP_ARROW || keyPressed == KEY_W) && !goingDown:
-      nextXVelocity = 0;
-      nextYVelocity = -unitSize;
+    case 38: // ↑
+    case 87: // W
+      setDirection(0, -unitSize);
       break;
-    case (keyPressed == RIGHT_ARROW || keyPressed == KEY_D) && !goingLeft:
-      nextXVelocity = unitSize;
-      nextYVelocity = 0;
+    case 39: // →
+    case 68: // D
+      setDirection(unitSize, 0);
       break;
-    case (keyPressed == DOWN_ARROW || keyPressed == KEY_S) && !goingUp:
-      nextXVelocity = 0;
-      nextYVelocity = unitSize;
+    case 40: // ↓
+    case 83: // S
+      setDirection(0, unitSize);
       break;
     default:
       return;
+  }
+}
+
+function touchDirectionHandler(e) {
+  const dir = e.currentTarget.dataset.dir;
+  switch (dir) {
+    case 'left':
+      setDirection(-unitSize, 0);
+      break;
+    case 'up':
+      setDirection(0, -unitSize);
+      break;
+    case 'right':
+      setDirection(unitSize, 0);
+      break;
+    case 'down':
+      setDirection(0, unitSize);
+      break;
   }
 }
 
