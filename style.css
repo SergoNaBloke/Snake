@@ -106,7 +106,7 @@ body {
 
 #controlButtonsWrapper {
   gap: 1rem;
-  display: none;
+  display: flex;
   align-items: center;
 }
 
@@ -117,7 +117,7 @@ body {
   gap: 1rem;
 }
 
-.dirrectionBtn {
+.controlButton {
   font-size: 6rem;
   line-height: 100%;
   background: none;
@@ -125,8 +125,8 @@ body {
   cursor: pointer;
 }
 
-@media (pointer: coarse) and (hover: none) {
+@media (hover: hover) and (pointer: fine) {
   #controlButtonsWrapper {
-    display: flex;
+    display: none;
   }
 }
