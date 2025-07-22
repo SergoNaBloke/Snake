@@ -5,13 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Snake</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="settings.css" />
   </head>
 
   <body>
     <header class="gameHeader">
       <h1>The Snake</h1>
       <div id="scoreText">0</div>
+      
+      <button id="open-settings">Settings</button>
+
+      <div id="overlay">
+        <div id="settings-modal">
+          <h2>Settings</h2>
+          <div class="form-group">
+            <label for="field-size">Field size</label>
+            <select id="field-size">
+              <option value="10">Small</option>
+              <option value="20" selected>Medium</option>
+              <option value="30">Large</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="snake-speed">Snake speed</label>
+            <select id="snake-speed">
+              <option value="200">Slow</option>
+              <option value="100" selected>Normal</option>
+              <option value="50">Fast</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="food-count">Food count</label>
+            <input type="number" id="food-count" min="1" max="10" value="3" />
+          </div>
+          <div class="form-group">
+            <label>Borders</label>
+            <div class="radio-group">
+              <label>
+                <input type="radio" name="border-type" value="transparent" checked />
+                Transparent
+              </label>
+              <label>
+                <input type="radio" name="border-type" value="solid" />
+                Solid
+              </label>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button id="cancel-btn">Cancel</button>
+            <button id="save-btn">Save</button>
+          </div>
+        </div>
+      </div>
     </header>
+
     <div id="gameContainer">
       <canvas id="gameBoard" width="500" height="500"></canvas>
       <div id="bottomButtonsWrapper">
@@ -27,7 +74,9 @@
         <button class="controlButton" data-dir="right">➡️</button>
       </div>
     </div>
+
   </body>
 
   <script src="index.js"></script>
+  <script src="settings.js"></script>
 </html>
