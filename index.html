@@ -4,66 +4,198 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Snake</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="settings.css" />
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/settings.css" />
   </head>
 
   <body>
     <header class="gameHeader">
-      <h1>The Snake</h1>
+      <h1>Snake</h1>
       <div id="scoreText">0</div>
-      
-      <button id="open-settings">Settings</button>
+      <div class="headerButtonsWrapper">
+        <button id="themeToggle" class="headerButton" aria-label="switch-theme">
+          <svg
+            class="icon moon-icon"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M8.23129 2.24048C9.24338 1.78695 10.1202 2.81145 9.80357 3.70098C8.72924 6.71928 9.38932 10.1474 11.6193 12.3765C13.8606 14.617 17.3114 15.2755 20.3395 14.1819C21.2206 13.8637 22.2173 14.7319 21.7817 15.7199C21.7688 15.7491 21.7558 15.7782 21.7427 15.8074C20.9674 17.5266 19.7272 19.1434 18.1227 20.2274C16.4125 21.3828 14.3957 22.0001 12.3316 22.0001H12.3306C9.93035 21.9975 7.6057 21.1603 5.75517 19.6321C3.90463 18.1039 2.64345 15.9797 2.18793 13.6237C1.73241 11.2677 2.11094 8.82672 3.2586 6.71917C4.34658 4.72121 6.17608 3.16858 8.20153 2.25386L8.23129 2.24048Z"
+            />
+          </svg>
+          <svg
+            class="icon sun-icon"
+            width="24"
+            height="24"
+            viewBox="0 0 64 64"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            enable-background="new 0 0 64 64"
+          >
+            <g>
+              <circle fill-rule="evenodd" clip-rule="evenodd" cx="32.003" cy="32.005" r="16.001" />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12.001,31.997c0-2.211-1.789-4-4-4H4c-2.211,0-4,1.789-4,4
+		s1.789,4,4,4h4C10.212,35.997,12.001,34.208,12.001,31.997z"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12.204,46.139l-2.832,2.833c-1.563,1.562-1.563,4.094,0,5.656
+		c1.562,1.562,4.094,1.562,5.657,0l2.833-2.832c1.562-1.562,1.562-4.095,0-5.657C16.298,44.576,13.767,44.576,12.204,46.139z"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M32.003,51.999c-2.211,0-4,1.789-4,4V60c0,2.211,1.789,4,4,4
+		s4-1.789,4-4l-0.004-4.001C36.003,53.788,34.21,51.999,32.003,51.999z"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M51.798,46.143c-1.559-1.566-4.091-1.566-5.653-0.004
+		s-1.562,4.095,0,5.657l2.829,2.828c1.562,1.57,4.094,1.562,5.656,0s1.566-4.09,0-5.656L51.798,46.143z"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M60.006,27.997l-4.009,0.008
+		c-2.203-0.008-3.992,1.781-3.992,3.992c-0.008,2.211,1.789,4,3.992,4h4.001c2.219,0.008,4-1.789,4-4
+		C64.002,29.79,62.217,27.997,60.006,27.997z"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M51.798,17.859l2.828-2.829c1.574-1.566,1.562-4.094,0-5.657
+		c-1.559-1.567-4.09-1.567-5.652-0.004l-2.829,2.836c-1.562,1.555-1.562,4.086,0,5.649C47.699,19.426,50.239,19.418,51.798,17.859z"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M32.003,11.995c2.207,0.016,4-1.789,4-3.992v-4
+		c0-2.219-1.789-4-4-4c-2.211-0.008-4,1.781-4,3.993l0.008,4.008C28.003,10.206,29.792,11.995,32.003,11.995z"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12.212,17.855c1.555,1.562,4.079,1.562,5.646-0.004
+		c1.574-1.551,1.566-4.09,0.008-5.649l-2.829-2.828c-1.57-1.571-4.094-1.559-5.657,0c-1.575,1.559-1.575,4.09-0.012,5.653
+		L12.212,17.855z"
+              />
+            </g>
+          </svg>
+        </button>
+        <button id="open-settings" class="headerButton" aria-label="Settings">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 256 256"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M227.99951,171.99353a12.00028,12.00028,0,0,1-12,12H197.65625a31.98806,31.98806,0,0,1-59.31348,0H39.99951a12,12,0,0,1,0-24h98.34326a31.98806,31.98806,0,0,1,59.31348,0h18.34326A12.00028,12.00028,0,0,1,227.99951,171.99353ZM39.999,95.99255l34.34375.00074a31.988,31.988,0,0,0,59.31348.00024L216,95.99255a12,12,0,0,0-.001-24l-82.34277.001a31.98813,31.98813,0,0,0-59.31348-.00024L40,71.99255h-.00049a12,12,0,0,0-.00049,24Z"
+            />
+          </svg>
+        </button>
+      </div>
 
       <div id="overlay">
-        <div id="settings-modal">
+        <form id="settings-modal">
           <h2>Settings</h2>
+          <!-- FIELD SIZE: Toggle Buttons -->
           <div class="form-group">
-            <label for="field-size">Field size</label>
-            <select id="field-size">
-              <option value="10">Small</option>
-              <option value="20" selected>Medium</option>
-              <option value="30">Large</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="snake-speed">Snake speed</label>
-            <select id="snake-speed">
-              <option value="200">Slow</option>
-              <option value="100" selected>Normal</option>
-              <option value="50">Fast</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="food-count">Food count</label>
-            <input type="number" id="food-count" min="1" max="10" value="3" />
-          </div>
-          <div class="form-group">
-            <label>Borders</label>
-            <div class="radio-group">
-              <label>
-                <input type="radio" name="border-type" value="transparent" checked />
-                Transparent
-              </label>
-              <label>
-                <input type="radio" name="border-type" value="solid" />
-                Solid
-              </label>
+            <label>Field size</label>
+            <div class="toggle-button-group" id="field-size-group">
+              <input type="radio" name="field-size" id="fs-small" value="10" />
+              <label for="fs-small" class="toggle-button">Small</label>
+
+              <input type="radio" name="field-size" id="fs-medium" value="20" checked />
+              <label for="fs-medium" class="toggle-button">Medium</label>
+
+              <input type="radio" name="field-size" id="fs-large" value="30" />
+              <label for="fs-large" class="toggle-button">Large</label>
             </div>
           </div>
-          <div class="modal-actions">
-            <button id="cancel-btn">Cancel</button>
-            <button id="save-btn">Save</button>
+          <!-- SNAKE SPEED: Toggle Buttons -->
+          <div class="form-group">
+            <label>Snake speed</label>
+            <div class="toggle-button-group" id="snake-speed-group">
+              <input type="radio" name="snake-speed" id="ss-slow" value="200" />
+              <label for="ss-slow" class="toggle-button">Slow</label>
+
+              <input type="radio" name="snake-speed" id="ss-normal" value="100" checked />
+              <label for="ss-normal" class="toggle-button">Normal</label>
+
+              <input type="radio" name="snake-speed" id="ss-fast" value="50" />
+              <label for="ss-fast" class="toggle-button">Fast</label>
+            </div>
           </div>
-        </div>
+          <!-- FOOD COUNT: Slider -->
+          <div class="form-group">
+            <label for="food-count">Food count: <span id="food-count-value">3</span></label>
+            <input type="range" id="food-count" name="food-count" min="1" max="10" value="3" />
+          </div>
+          <!-- TRANSPARENT BORDERS: Toggle Switch -->
+          <div class="form-group">
+            <label for="border-type">Transparent borders</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="border-type" name="border-type" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <!-- SAVE / CANSEl -->
+          <div class="modal-actions">
+            <button type="button" id="cancel-btn">Cancel</button>
+            <button type="submit" id="save-btn">Save</button>
+          </div>
+        </form>
       </div>
     </header>
 
     <div id="gameContainer">
       <canvas id="gameBoard" width="500" height="500"></canvas>
       <div id="bottomButtonsWrapper">
-        <button id="resetBtn" class="buttonStyleOne">Reset</button>
-        <button id="themeToggle" class="buttonStyleOne" aria-label="Toggle theme">🌓</button>
+        <button id="startBtn" class="buttonStyleOne">Start</button>
+        <!-- <button id="resetBtn" class="buttonStyleOne">Reset</button> -->
+        <button id="resetBtn" class="headerButton">
+          <svg
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_429_11071)">
+              <path
+                d="M12 2.99982C16.9706 2.99982 21 7.02925 21 11.9998C21 16.9704 16.9706 20.9998 12 20.9998C7.02944 20.9998 3 16.9704 3 11.9998C3 9.17255 4.30367 6.64977 6.34267 4.99982"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M3 4.49982H7V8.49982"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <!-- <defs>
+              <clipPath id="clip0_429_11071">
+                <rect width="24" height="24" fill="white"/>
+              </clipPath>
+            </defs> -->
+          </svg>
+        </button>
       </div>
       <div id="controlButtonsWrapper">
         <button class="controlButton" data-dir="left">⬅️</button>
@@ -74,9 +206,9 @@
         <button class="controlButton" data-dir="right">➡️</button>
       </div>
     </div>
-
   </body>
 
-  <script src="index.js"></script>
+  <script src="mainOLD.js"></script>
+  <!-- <script src="main.js"></script> -->
   <script src="settings.js"></script>
 </html>

@@ -1,0 +1,138 @@
+/* #open-settings {
+  display: flex;
+  background: #fff;
+  background: var(--bnt-color);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  width: 3rem;
+  height: 3rem;
+  justify-content: center;
+  align-items: center;
+} */
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#settings-modal {
+  background: var(--bg-color);
+  background: var(--bg-header-color);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  width: 300px;
+}
+#settings-modal h2 {
+  margin-top: 0;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Группа toggle-button */
+.toggle-button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-button-group input[type="radio"] {
+  display: none;
+}
+
+.toggle-button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-button-group input[type="radio"]:checked + .toggle-button {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Слайдер */
+.form-group input[type="range"] {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: .2s;
+}
+
+.switch-slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .2s;
+}
+
+.toggle-switch input:checked + .switch-slider {
+  background-color: #007bff;
+}
+
+.toggle-switch input:checked + .switch-slider::before {
+  transform: translateX(20px);
+}
+
+/* .icon-button {
+  font-size: 2rem;
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+}
+
+.icon-button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+} */
+
+.icon-gear {
+  width: 24px;
+  height: 24px;
+  display: block;
+  color: #333; /* при наведении можно менять цвет */
+  transition: color .2s;
+}
+
+.icon-button:hover .icon-gear {
+  color: #007bff;
+}
