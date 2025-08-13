@@ -78,7 +78,6 @@ body {
   width: 3.5rem;
   height: 3.5rem;
   font-size: 1.75rem;
-  background: none;
   border: none;
   border-radius: 0.75rem;
   cursor: pointer;
@@ -142,24 +141,27 @@ body {
   justify-content: space-between;
 }
 
-#bottomButtonsWrapper button {
-  font-size: 2rem;
+.bottomButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 8rem;
   height: 4rem;
-  color: var(--text-color);
-  background-color: var(--bnt-color);
-  border: 0rem solid transparent;
+  font-size: 2rem;
+  border: none;
   border-radius: 1.5rem;
   cursor: pointer;
+  color: var(--text-color);
+  background: var(--bnt-color)
 }
 
-#bottomButtonsWrapper button:hover {
+.bottomButton:hover {
   background-color: var(--bnt-color-hover);
 }
 
-/* решить 
-  (баг с ховер)
-  (определить стили для разных кнопок) */
+
+
+
 
 
 
