@@ -8,8 +8,8 @@ html {
   --text-color: #111111;
   --bg-color: #f5f5f5ff;
   --bg-header-color: #f5f5f5ff;
-  --bnt-color: rgb(216, 216, 216);
-  --bnt-color-hover: rgb(200, 200, 200);
+  --btn-color: rgb(216, 216, 216);
+  --btn-color-hover: rgb(200, 200, 200);
 
   --board-bg: #ffffff;
   --board-border: #cccccc;
@@ -22,8 +22,8 @@ html {
   --text-color: rgb(230, 230, 230);
   --bg-color: #121212;
   --bg-header-color: #121212;
-  --bnt-color: rgb(48, 48, 48);
-  --bnt-color-hover: rgb(55, 55, 55);
+  --btn-color: rgb(48, 48, 48);
+  --btn-color-hover: rgb(55, 55, 55);
 
   --board-bg: #222222;
   --board-border: #3d3d3d;
@@ -43,6 +43,23 @@ html {
 body {
   color: var(--text-color);
   background-color: var(--bg-color);
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  /* outline: none; */
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--btn-color-hover);
+    }
+  }
+
+  &:active {
+    transform: scale(0.9);
+    transition: transform 0.1s ease;
+  }
 }
 
 
@@ -82,11 +99,8 @@ body {
   border-radius: 0.75rem;
   cursor: pointer;
   color: var(--text-color);
-  background: var(--bnt-color);
-}
-
-.headerButton:hover {
-  background: var(--bnt-color-hover);
+  background-color: var(--btn-color);
+  
 }
 
 .sun-icon { display: inline-block; }
@@ -139,6 +153,7 @@ body {
   max-width: 100%;
   display: flex;
   justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .bottomButton {
@@ -152,12 +167,9 @@ body {
   border-radius: 1.5rem;
   cursor: pointer;
   color: var(--text-color);
-  background: var(--bnt-color)
+  background-color: var(--btn-color);
 }
 
-.bottomButton:hover {
-  background-color: var(--bnt-color-hover);
-}
 
 
 

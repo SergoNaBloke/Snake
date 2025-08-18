@@ -1,15 +1,3 @@
-/* #open-settings {
-  display: flex;
-  background: #fff;
-  background: var(--bnt-color);
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-  width: 3rem;
-  height: 3rem;
-  justify-content: center;
-  align-items: center;
-} */
-
 #overlay {
   position: fixed;
   top: 0;

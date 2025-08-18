@@ -46,6 +46,7 @@ let snake = [
   { x: 0, y: 0 },
 ];
 
+document.addEventListener("touchstart", function(){}, true);
 window.addEventListener('keydown', changeDirection);
 document.querySelectorAll('.controlButton').forEach((btn) => {
   // click для мыши, touchstart для тача
