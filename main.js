@@ -46,11 +46,25 @@ let snake = [
   { x: 0, y: 0 },
 ];
 
-// const overlay = document.getElementById('overlay');
+const overlay = document.getElementById('overlay');
+const openBtn = document.getElementById('open-settings');
+const cancelBtn = document.getElementById('cancel-btn');
+const saveBtn = document.getElementById('save-btn');
+
 const form = document.getElementById('settings-modal');
 const foodSlider = document.getElementById('food-count');
 const foodValueEl = document.getElementById('food-count-value');
 const borderCheckbox = document.getElementById('border-type');
+
+openBtn.addEventListener('click', () => {
+  overlay.style.display = 'flex';
+});
+cancelBtn.addEventListener('click', () => {
+  overlay.style.display = 'none';
+});
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) overlay.style.display = 'none';
+});
 
 foodSlider.addEventListener('input', (e) => {
   foodValueEl.textContent = e.target.value; // live-обновление числа
@@ -87,10 +101,11 @@ form.addEventListener('submit', (e) => {
     foodCount: parseInt(fd.get('food-count'), 10),
     transparentBorders: !!fd.get('border-type'),
   };
-  // overlay.style.display = 'flex';
+  overlay.style.display = 'none';
 
   // game.applySettings(config);            // применяем к движку (см. ниже)
   localStorage.setItem('snakeSettings', JSON.stringify(config)); // запомним выбор
+  resetGame()
 });
 
 window.addEventListener('DOMContentLoaded', () => {
