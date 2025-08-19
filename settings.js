@@ -18,8 +18,6 @@ saveBtn.addEventListener('click', () => {
     borderType: document.querySelector('input[name="border-type"]:checked').value,
   };
   console.log('Сохранённые настройки:', settings);
-  // Здесь можно вызвать функцию вашей игры, например:
-  // applySettings(settings);
   overlay.style.display = 'none';
 });
 

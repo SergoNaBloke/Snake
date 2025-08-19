@@ -1,71 +1,337 @@
-/* const canvas = document.querySelector('#gameBoard');
-const ctx = canvas.getContext('2d');
-const cols = 20; // например, сетка 20×20
-let boxSize;
+const themeToggle = document.querySelector('#themeToggle');
+const root = document.documentElement;
 
-function resizeCanvasSquare() {
-  // Получаем ширину родителя в CSS-пикселях
-  const parentWidth = canvas.parentElement.clientWidth;
-  // devicePixelRatio для чёткости на Retina-экранах
-  const ratio = window.devicePixelRatio || 1;
+const currentTheme = localStorage.getItem('theme') || 'light';
+root.setAttribute('data-theme', currentTheme);
 
-  // Устанавливаем реальный буфер в пикселях
-  canvas.width = parentWidth * ratio;
-  canvas.height = parentWidth * ratio; // same as width!
+themeToggle.addEventListener('click', () => {
+  const newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  root.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
 
-  // Оставляем CSS-размер лишь по ширине (100%)
-  // А высота выставим вручную в px, чтобы блок остался квадратным
-  canvas.style.width = parentWidth + 'px';
-  canvas.style.height = parentWidth + 'px';
+  clearBoard();
+  drawFood();
+  drawSnake();
+  checkGameOver();
+  if (!running) {
+    displayGameOver();
+  }
+});
 
-  // Сбрасываем предыдущие преобразования и масштабируем контекст
-  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-  // Пересчитываем размер «клетки» змейки
-  boxSize = Math.floor(parentWidth / cols);
-  // boxSize = parentWidth / cols;
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
+const gameboard = document.querySelector('#gameBoard');
+const ctx = gameboard.getContext('2d');
+const scoreText = document.querySelector('#scoreText');
+const resetBtn = document.querySelector('#resetBtn');
+const gameWidth = gameboard.width;
+const gameHeight = gameboard.height;
+const unitSize = 25;
+let running = false;
+let gameTimerId;
+let xVelocity = unitSize;
+let yVelocity = 0;
+let nextXVelocity = xVelocity;
+let nextYVelocity = yVelocity;
+let foodX;
+let foodY;
+let score = 0;
 let snake = [
-  // { x: 20, y: 0 },
-  { x: 19, y: 1 },
-  { x: 18, y: 2 },
-  { x: 1, y: 0 },
+  { x: unitSize * 4, y: 0 },
+  { x: unitSize * 3, y: 0 },
+  { x: unitSize * 2, y: 0 },
+  { x: unitSize * 1, y: 0 },
   { x: 0, y: 0 },
 ];
-// Ваша функция рисования
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#00FF00';
-  snake.forEach((seg) => {
-    ctx.fillRect(seg.x * boxSize, seg.y * boxSize, boxSize, boxSize);
+
+// const overlay = document.getElementById('overlay');
+const form = document.getElementById('settings-modal');
+const foodSlider = document.getElementById('food-count');
+const foodValueEl = document.getElementById('food-count-value');
+const borderCheckbox = document.getElementById('border-type');
+
+foodSlider.addEventListener('input', (e) => {
+  foodValueEl.textContent = e.target.value; // live-обновление числа
+  foodCount = e.target.value; // обновляем глобальную переменную foodCount
+  console.log(`Food count: ${foodCount}`);
+});
+
+document.querySelectorAll('input[name="field-size"]').forEach((el) => {
+  el.addEventListener('change', (e) => {
+    const fieldColums = parseInt(e.target.value, 10); // присванивание размера поля в переменную
+    console.log(`Field: ${fieldColums}`);
   });
-  requestAnimationFrame(draw);
+});
+
+document.querySelectorAll('input[name="snake-speed"]').forEach((el) => {
+  el.addEventListener('change', (e) => {
+    const snakeSpeedMs = parseInt(e.target.value, 10);
+    console.log(`Speed: ${snakeSpeedMs} ms`);
+  });
+});
+
+borderCheckbox.addEventListener('change', (e) => {
+  const transparentBorders = e.target.checked;
+  console.log(`Transparent borders: ${transparentBorders}`);
+});
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();                     // не даём форме перезагружать страницу.
+  const fd = new FormData(form);          // удобный сбор значений при submit.
+
+  const config = {
+    fieldColums: parseInt(fd.get('field-size'), 10),
+    snakeSpeedMs: parseInt(fd.get('snake-speed'), 10),
+    foodCount: parseInt(fd.get('food-count'), 10),
+    transparentBorders: !!fd.get('border-type'),
+  };
+  // overlay.style.display = 'flex';
+
+  // game.applySettings(config);            // применяем к движку (см. ниже)
+  localStorage.setItem('snakeSettings', JSON.stringify(config)); // запомним выбор
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('snakeSettings');
+  if (!saved) return;
+
+  const config = JSON.parse(saved);
+  // 1. Восстановление контролов
+  const sizeRadio = document.querySelector(`input[name="field-size"][value="${config.fieldColums}"]`);
+  if (sizeRadio) sizeRadio.checked = true;
+
+  const speedRadio = document.querySelector(`input[name="snake-speed"][value="${config.snakeSpeedMs}"]`);
+  if (speedRadio) speedRadio.checked = true;
+
+  const slider = document.getElementById('food-count');
+  if (slider) {
+    slider.value = config.foodCount;
+    document.getElementById('food-count-value').textContent = config.foodCount;
+  }
+
+  const borderCheckbox = document.getElementById('border-type');
+  if (borderCheckbox) borderCheckbox.checked = config.transparentBorders;
+
+  // 2. Применение настроек в игре
+  // game.applySettings({
+  //   ColfieldColums parseInt(config.ColfieldColums 10),
+  //   speedMs   : parseInt(config.snakeSpeed, 10),
+  //   foodCount : parseInt(config.foodCount, 10),
+  //   borderWrap: !!config.borderWrap
+  // });
+});
+
+document.addEventListener("touchstart", function(){}, true);
+window.addEventListener('keydown', changeDirection);
+document.querySelectorAll('.controlButton').forEach((btn) => {
+  // click для мыши, touchstart для тача
+  btn.addEventListener('click', touchDirectionHandler);
+  btn.addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault(); // чтобы не сработал клик-мокап через мышь
+      touchDirectionHandler(e);
+    },
+    { passive: false },
+  );
+});
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
+    resetGame();
+  }
+});
+resetBtn.addEventListener('click', resetGame);
+
+gameStart();
+
+function gameStart() {
+  running = true;
+  scoreText.textContent = score;
+  clearBoard();
+  createFood();
+  drawFood();
+  drawSnake();
+  nextTick();
 }
 
-// Подвязываем ресайз: инициализация + слушатель
-resizeCanvasSquare();
-window.addEventListener('resize', resizeCanvasSquare);
-draw(); */
+function nextTick() {
+  gameTimerId = setTimeout(() => {
+    moveSnake();
+    checkGameOver();
 
-// Допустим, logicalWidth = 500, devicePixelRatio = 2
-const canvas = document.querySelector('#gameBoard');
-canvas.width = 500 * 3;
-canvas.height = 500 * 3;
-canvas.style.width = '500px';
+    if (running) {
+      clearBoard();
+      drawFood();
+      drawSnake();
+      nextTick();
+    } else {
+      displayGameOver();
+    }
+  }, 500);
+}
 
-const ctx = canvas.getContext('2d');
+function clearBoard() {
+  ctx.fillStyle = cssVar('--board-bg');
+  ctx.fillRect(0, 0, gameWidth, gameHeight);
+}
 
-ctx.scale(3, 3);
+function createFood() {
+  function randomFood(min, max) {
+    const randomNum = Math.round((Math.random() * (max - min) + min) / unitSize) * unitSize;
+    return randomNum;
+  }
 
-ctx.fillRect(0, 0, 100, 100);
-ctx.fillRect(100, 100, 100, 100);
-ctx.fillRect(0, 200, 100, 100);
+  let newX, newY;
 
-// окружность радиусом 5px, центр (100,100)
-ctx.beginPath();
-ctx.arc(100, 100, 5, 0, Math.PI * 2);
-ctx.fillStyle = 'orange';
-ctx.fill();
-ctx.strokeStyle = 'darkorange';
-ctx.stroke();
+  // Генерируем до тех пор, пока не найдём свободную клетку
+  do {
+    newX = randomFood(0, gameWidth - unitSize);
+    newY = randomFood(0, gameHeight - unitSize);
+    // snake.some вернёт true, если хоть один сегмент совпадает с (newX, newY)
+  } while (snake.some((segment) => segment.x === newX && segment.y === newY));
+
+  foodX = newX;
+  foodY = newY;
+}
+
+function drawFood() {
+  ctx.fillStyle = cssVar('--food-color');
+  ctx.fillRect(foodX, foodY, unitSize, unitSize);
+}
+
+function moveSnake() {
+  yVelocity = nextYVelocity;
+  xVelocity = nextXVelocity;
+  const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
+  snake.unshift(head);
+  // if food is eaten
+  if (snake[0].x === foodX && snake[0].y === foodY) {
+    score += 1;
+    scoreText.textContent = score;
+    createFood();
+  } else {
+    snake.pop(); // remove the last part of the snake if food is not eaten
+  }
+}
+
+function drawSnake() {
+  ctx.fillStyle = cssVar('--snake-color');
+  ctx.strokeStyle = cssVar('--snake-border');
+  snake.forEach((snakePart) => {
+    ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
+    ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
+  });
+}
+
+function setDirection(desiredX, desiredY) {
+  const goingUp = yVelocity === -unitSize;
+  const goingDown = yVelocity === unitSize;
+  const goingRight = xVelocity === unitSize;
+  const goingLeft = xVelocity === -unitSize;
+
+  // запрет на разворот на 180°
+  if (
+    (desiredX === -unitSize && goingRight) ||
+    (desiredX === unitSize && goingLeft) ||
+    (desiredY === -unitSize && goingDown) ||
+    (desiredY === unitSize && goingUp)
+  ) {
+    return;
+  }
+
+  nextXVelocity = desiredX;
+  nextYVelocity = desiredY;
+}
+
+function changeDirection(event) {
+  const key = event.keyCode;
+  switch (key) {
+    case 37: // ←
+    case 65: // A
+      setDirection(-unitSize, 0);
+      break;
+    case 38: // ↑
+    case 87: // W
+      setDirection(0, -unitSize);
+      break;
+    case 39: // →
+    case 68: // D
+      setDirection(unitSize, 0);
+      break;
+    case 40: // ↓
+    case 83: // S
+      setDirection(0, unitSize);
+      break;
+    default:
+      return;
+  }
+}
+
+function touchDirectionHandler(e) {
+  const dir = e.currentTarget.dataset.dir;
+  switch (dir) {
+    case 'left':
+      setDirection(-unitSize, 0);
+      break;
+    case 'up':
+      setDirection(0, -unitSize);
+      break;
+    case 'right':
+      setDirection(unitSize, 0);
+      break;
+    case 'down':
+      setDirection(0, unitSize);
+      break;
+  }
+}
+
+function checkGameOver() {
+  switch (true) {
+    case snake[0].x < 0:
+      running = false;
+      break;
+    case snake[0].x >= gameWidth:
+      running = false;
+      break;
+    case snake[0].y < 0:
+      running = false;
+      break;
+    case snake[0].y >= gameHeight:
+      running = false;
+      break;
+  }
+  for (let i = 1; i < snake.length; i++) {
+    if (snake[i].x == snake[0].x && snake[i].y === snake[0].y) {
+      running = false;
+    }
+  }
+}
+
+function displayGameOver() {
+  ctx.font = '50px MV Boli';
+  ctx.fillStyle = cssVar('--text-color');
+  ctx.textAlign = 'center';
+  ctx.fillText('GAME OVER!', gameWidth / 2, gameHeight / 2);
+  running = false;
+}
+
+function resetGame() {
+  clearTimeout(gameTimerId);
+
+  score = 0;
+  xVelocity = unitSize;
+  yVelocity = 0;
+  nextXVelocity = xVelocity;
+  nextYVelocity = yVelocity;
+  snake = [
+    { x: unitSize * 4, y: 0 },
+    { x: unitSize * 3, y: 0 },
+    { x: unitSize * 2, y: 0 },
+    { x: unitSize * 1, y: 0 },
+    { x: 0, y: 0 },
+  ];
+  clearBoard();
+  gameStart();
+}

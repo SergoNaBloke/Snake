@@ -99,28 +99,3 @@
 .toggle-switch input:checked + .switch-slider::before {
   transform: translateX(20px);
 }
-
-/* .icon-button {
-  font-size: 2rem;
-  background: transparent;
-  border: none;
-  padding: 0.25rem;
-  cursor: pointer;
-}
-
-.icon-button:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
-} */
-
-.icon-gear {
-  width: 24px;
-  height: 24px;
-  display: block;
-  color: #333; /* при наведении можно менять цвет */
-  transition: color .2s;
-}
-
-.icon-button:hover .icon-gear {
-  color: #007bff;
-}
