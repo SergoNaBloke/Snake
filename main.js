@@ -4,7 +4,7 @@ const root = document.documentElement;
 const currentTheme = localStorage.getItem('theme') || 'light';
 root.setAttribute('data-theme', currentTheme);
 
-themeToggle.addEventListener('click', () => {
+themeToggle.addEventListener('click', () => {  // переключение темы
   const newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
   root.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
@@ -18,7 +18,7 @@ themeToggle.addEventListener('click', () => {
   }
 });
 
-function cssVar(name) {
+function cssVar(name) { // получение CSS-переменных
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
@@ -45,6 +45,14 @@ let snake = [
   { x: unitSize * 1, y: 0 },
   { x: 0, y: 0 },
 ];
+let foodCount = 1;
+let fieldColums = 16; 
+let snakeSpeedMs = 500;
+let transparentBorders = false;
+let tempFoodCount = foodCount;
+let tempFieldColums = fieldColums;
+let tempSnakeSpeedMs = snakeSpeedMs;
+let tempTransparentBorders = transparentBorders;
 
 const overlay = document.getElementById('overlay');
 const openBtn = document.getElementById('open-settings');
@@ -66,33 +74,39 @@ overlay.addEventListener('click', (e) => {
   if (e.target === overlay) overlay.style.display = 'none';
 });
 
-foodSlider.addEventListener('input', (e) => {
+foodSlider.addEventListener('input', (e) => { // слушатель настроек еды
   foodValueEl.textContent = e.target.value; // live-обновление числа
-  foodCount = e.target.value; // обновляем глобальную переменную foodCount
+  tempFoodCount = e.target.value; // обновляем глобальную переменную foodCount
   console.log(`Food count: ${foodCount}`);
 });
 
-document.querySelectorAll('input[name="field-size"]').forEach((el) => {
+document.querySelectorAll('input[name="field-size"]').forEach((el) => { // слушатель размера поля
   el.addEventListener('change', (e) => {
-    const fieldColums = parseInt(e.target.value, 10); // присванивание размера поля в переменную
+    tempFieldColums = parseInt(e.target.value, 10); // присванивание размера поля в переменную
     console.log(`Field: ${fieldColums}`);
   });
 });
 
-document.querySelectorAll('input[name="snake-speed"]').forEach((el) => {
+document.querySelectorAll('input[name="snake-speed"]').forEach((el) => { // слушатель скорости змейки
   el.addEventListener('change', (e) => {
-    const snakeSpeedMs = parseInt(e.target.value, 10);
+    tempSnakeSpeedMs = parseInt(e.target.value, 10);
     console.log(`Speed: ${snakeSpeedMs} ms`);
   });
 });
 
-borderCheckbox.addEventListener('change', (e) => {
-  const transparentBorders = e.target.checked;
+borderCheckbox.addEventListener('change', (e) => { // слушатель прозрачности границ
+  tempTransparentBorders = e.target.checked;
   console.log(`Transparent borders: ${transparentBorders}`);
 });
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', (e) => { // применение настроек
   e.preventDefault();                     // не даём форме перезагружать страницу.
+
+  fieldColums = tempFieldColums;
+  snakeSpeedMs = tempSnakeSpeedMs;
+  foodCount = tempFoodCount;
+  transparentBorders = tempTransparentBorders;
+
   const fd = new FormData(form);          // удобный сбор значений при submit.
 
   const config = {
@@ -103,39 +117,55 @@ form.addEventListener('submit', (e) => {
   };
   overlay.style.display = 'none';
 
-  // game.applySettings(config);            // применяем к движку (см. ниже)
   localStorage.setItem('snakeSettings', JSON.stringify(config)); // запомним выбор
   resetGame()
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('snakeSettings');
-  if (!saved) return;
+  const raw = localStorage.getItem('snakeSettings');
+  if (!raw) return;
 
-  const config = JSON.parse(saved);
-  // 1. Восстановление контролов
-  const sizeRadio = document.querySelector(`input[name="field-size"][value="${config.fieldColums}"]`);
-  if (sizeRadio) sizeRadio.checked = true;
-
-  const speedRadio = document.querySelector(`input[name="snake-speed"][value="${config.snakeSpeedMs}"]`);
-  if (speedRadio) speedRadio.checked = true;
-
-  const slider = document.getElementById('food-count');
-  if (slider) {
-    slider.value = config.foodCount;
-    document.getElementById('food-count-value').textContent = config.foodCount;
+  let cfg;
+  try {
+    cfg = JSON.parse(raw);
+  } catch {
+    return;
   }
 
-  const borderCheckbox = document.getElementById('border-type');
-  if (borderCheckbox) borderCheckbox.checked = config.transparentBorders;
+  // Восстановление контролов
+  if (cfg.fieldColums !== undefined) {
+    const sizeRadio = document.querySelector(
+      `input[name="field-size"][value="${cfg.fieldColums}"]`
+    );
+    if (sizeRadio) sizeRadio.checked = true;
+    fieldColums = Number(cfg.fieldColums);
+  }
 
-  // 2. Применение настроек в игре
-  // game.applySettings({
-  //   ColfieldColums parseInt(config.ColfieldColums 10),
-  //   speedMs   : parseInt(config.snakeSpeed, 10),
-  //   foodCount : parseInt(config.foodCount, 10),
-  //   borderWrap: !!config.borderWrap
-  // });
+  if (cfg.snakeSpeedMs !== undefined) {
+    const speedRadio = document.querySelector(
+      `input[name="snake-speed"][value="${cfg.snakeSpeedMs}"]`
+    );
+    if (speedRadio) speedRadio.checked = true;
+    snakeSpeedMs = Number(cfg.snakeSpeedMs);
+  }
+
+  if (cfg.foodCount !== undefined) {
+    const slider = document.getElementById('food-count');
+    if (slider) {
+      slider.value = String(cfg.foodCount);
+      const label = document.getElementById('food-count-value');
+      if (label) label.textContent = String(cfg.foodCount);
+    }
+    foodCount = Number(cfg.foodCount);
+  }
+
+  if (cfg.transparentBorders !== undefined) {
+    const borderCheckbox = document.getElementById('border-type');
+    if (borderCheckbox) borderCheckbox.checked = Boolean(cfg.transparentBorders);
+    transparentBorders = Boolean(cfg.transparentBorders);
+  }
+
+  console.log(fieldColums, snakeSpeedMs, foodCount, transparentBorders);
 });
 
 document.addEventListener("touchstart", function(){}, true);
@@ -159,9 +189,23 @@ window.addEventListener('keydown', (e) => {
 });
 resetBtn.addEventListener('click', resetGame);
 
-gameStart();
+resetGame();
 
-function gameStart() {
+function resetGame() {
+  clearTimeout(gameTimerId);
+
+  score = 0;
+  xVelocity = unitSize;
+  yVelocity = 0;
+  nextXVelocity = xVelocity;
+  nextYVelocity = yVelocity;
+  snake = [
+    { x: unitSize * 4, y: 0 },
+    { x: unitSize * 3, y: 0 },
+    { x: unitSize * 2, y: 0 },
+    { x: unitSize * 1, y: 0 },
+    { x: 0, y: 0 },
+  ];
   running = true;
   scoreText.textContent = score;
   clearBoard();
@@ -184,7 +228,8 @@ function nextTick() {
     } else {
       displayGameOver();
     }
-  }, 500);
+    console.log(snakeSpeedMs)
+  }, snakeSpeedMs);
 }
 
 function clearBoard() {
@@ -330,23 +375,4 @@ function displayGameOver() {
   ctx.textAlign = 'center';
   ctx.fillText('GAME OVER!', gameWidth / 2, gameHeight / 2);
   running = false;
-}
-
-function resetGame() {
-  clearTimeout(gameTimerId);
-
-  score = 0;
-  xVelocity = unitSize;
-  yVelocity = 0;
-  nextXVelocity = xVelocity;
-  nextYVelocity = yVelocity;
-  snake = [
-    { x: unitSize * 4, y: 0 },
-    { x: unitSize * 3, y: 0 },
-    { x: unitSize * 2, y: 0 },
-    { x: unitSize * 1, y: 0 },
-    { x: 0, y: 0 },
-  ];
-  clearBoard();
-  gameStart();
 }
