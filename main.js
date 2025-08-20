@@ -47,12 +47,12 @@ let snake = [
 ];
 let foodCount = 1;
 let fieldColums = 16; 
-let snakeSpeedMs = 500;
+let snakeSpeedMs = 450;
 let transparentBorders = false;
-let tempFoodCount = foodCount;
-let tempFieldColums = fieldColums;
-let tempSnakeSpeedMs = snakeSpeedMs;
-let tempTransparentBorders = transparentBorders;
+let tempFoodCount;
+let tempFieldColums;
+let tempSnakeSpeedMs;
+let tempTransparentBorders;
 
 const overlay = document.getElementById('overlay');
 const openBtn = document.getElementById('open-settings');
@@ -64,15 +64,28 @@ const foodSlider = document.getElementById('food-count');
 const foodValueEl = document.getElementById('food-count-value');
 const borderCheckbox = document.getElementById('border-type');
 
-openBtn.addEventListener('click', () => {
+openBtn.addEventListener('click', () => { // открытие оверлея
   overlay.style.display = 'flex';
 });
-cancelBtn.addEventListener('click', () => {
+
+cancelBtn.addEventListener('click', () => { // закрытие оверлея
   overlay.style.display = 'none';
+  
+  // Восстанавливаем интерфейс по сохранённым значениям
+  foodSlider.value = foodCount;
+  foodValueEl.textContent = foodCount;
+  document.querySelector(`input[name="field-size"][value="${fieldColums}"]`).checked = true;
+  document.querySelector(`input[name="snake-speed"][value="${snakeSpeedMs}"]`).checked = true;
+  borderCheckbox.checked = transparentBorders;
 });
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) overlay.style.display = 'none';
+
+overlay.addEventListener('click', (e) => { // слушаем клик по оверлею
+  if (e.target === overlay) {
+    cancelBtn.click(); // внутри cancelBtn уже скрывается overlay
+  }
 });
+
+form.addEventListener('submit', applySettings); // применение настроек
 
 foodSlider.addEventListener('input', (e) => { // слушатель настроек еды
   foodValueEl.textContent = e.target.value; // live-обновление числа
@@ -99,29 +112,39 @@ borderCheckbox.addEventListener('change', (e) => { // слушатель про�
   console.log(`Transparent borders: ${transparentBorders}`);
 });
 
-form.addEventListener('submit', (e) => { // применение настроек
-  e.preventDefault();                     // не даём форме перезагружать страницу.
 
-  fieldColums = tempFieldColums;
-  snakeSpeedMs = tempSnakeSpeedMs;
-  foodCount = tempFoodCount;
-  transparentBorders = tempTransparentBorders;
 
-  const fd = new FormData(form);          // удобный сбор значений при submit.
 
-  const config = {
-    fieldColums: parseInt(fd.get('field-size'), 10),
-    snakeSpeedMs: parseInt(fd.get('snake-speed'), 10),
-    foodCount: parseInt(fd.get('food-count'), 10),
-    transparentBorders: !!fd.get('border-type'),
-  };
-  overlay.style.display = 'none';
-
-  localStorage.setItem('snakeSettings', JSON.stringify(config)); // запомним выбор
-  resetGame()
+window.addEventListener('DOMContentLoaded', () => { // события при загрузке
+  checkLocalStorageSettings();
+  // setSizing(); // устанавливаем размер игрового поля
+  resetGame();
 });
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("touchstart", function(){}, true);
+window.addEventListener('keydown', changeDirection);
+document.querySelectorAll('.controlButton').forEach((btn) => {
+  // click для мыши, touchstart для тача
+  btn.addEventListener('click', touchDirectionHandler);
+  btn.addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault(); // чтобы не сработал клик-мокап через мышь
+      touchDirectionHandler(e);
+    },
+    { passive: false },
+  );
+});
+resetGame();
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
+    resetGame();
+  }
+});
+resetBtn.addEventListener('click', resetGame);
+
+
+function checkLocalStorageSettings() { // восстанавливаем настройки из localStorage
   const raw = localStorage.getItem('snakeSettings');
   if (!raw) return;
 
@@ -166,30 +189,31 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   console.log(fieldColums, snakeSpeedMs, foodCount, transparentBorders);
-});
+}
 
-document.addEventListener("touchstart", function(){}, true);
-window.addEventListener('keydown', changeDirection);
-document.querySelectorAll('.controlButton').forEach((btn) => {
-  // click для мыши, touchstart для тача
-  btn.addEventListener('click', touchDirectionHandler);
-  btn.addEventListener(
-    'touchstart',
-    (e) => {
-      e.preventDefault(); // чтобы не сработал клик-мокап через мышь
-      touchDirectionHandler(e);
-    },
-    { passive: false },
-  );
-});
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
-    resetGame();
-  }
-});
-resetBtn.addEventListener('click', resetGame);
+// function setSizing() {}
 
-resetGame();
+function applySettings (e) { // применение настроек
+  e.preventDefault();                     // не даём форме перезагружать страницу.
+
+  fieldColums = tempFieldColums;      // применяем выбранные настройки
+  snakeSpeedMs = tempSnakeSpeedMs;
+  foodCount = tempFoodCount;
+  transparentBorders = tempTransparentBorders;
+
+  const fd = new FormData(form);          // удобный сбор значений при submit.
+
+  const config = {
+    fieldColums: parseInt(fd.get('field-size'), 10),
+    snakeSpeedMs: parseInt(fd.get('snake-speed'), 10),
+    foodCount: parseInt(fd.get('food-count'), 10),
+    transparentBorders: !!fd.get('border-type'),
+  };
+  overlay.style.display = 'none';
+  // запись настроек в localStorage
+  localStorage.setItem('snakeSettings', JSON.stringify(config));
+  resetGame()
+}
 
 function resetGame() {
   clearTimeout(gameTimerId);
