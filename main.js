@@ -90,26 +90,26 @@ form.addEventListener('submit', applySettings); // применение наст
 foodSlider.addEventListener('input', (e) => { // слушатель настроек еды
   foodValueEl.textContent = e.target.value; // live-обновление числа
   tempFoodCount = e.target.value; // обновляем глобальную переменную foodCount
-  console.log(`Food count: ${foodCount}`);
+  console.log(`Food count: ${tempFoodCount}`);
 });
 
 document.querySelectorAll('input[name="field-size"]').forEach((el) => { // слушатель размера поля
   el.addEventListener('change', (e) => {
     tempFieldColums = parseInt(e.target.value, 10); // присванивание размера поля в переменную
-    console.log(`Field: ${fieldColums}`);
+    console.log(`Field: ${tempFieldColums}`);
   });
 });
 
 document.querySelectorAll('input[name="snake-speed"]').forEach((el) => { // слушатель скорости змейки
   el.addEventListener('change', (e) => {
     tempSnakeSpeedMs = parseInt(e.target.value, 10);
-    console.log(`Speed: ${snakeSpeedMs} ms`);
+    console.log(`Speed: ${tempSnakeSpeedMs} ms`);
   });
 });
 
 borderCheckbox.addEventListener('change', (e) => { // слушатель прозрачности границ
   tempTransparentBorders = e.target.checked;
-  console.log(`Transparent borders: ${transparentBorders}`);
+  console.log(`Transparent borders: ${tempTransparentBorders}`);
 });
 
 
@@ -117,7 +117,7 @@ borderCheckbox.addEventListener('change', (e) => { // слушатель про�
 
 window.addEventListener('DOMContentLoaded', () => { // события при загрузке
   checkLocalStorageSettings();
-  // setSizing(); // устанавливаем размер игрового поля
+  setSizing();
   resetGame();
 });
 
@@ -135,7 +135,7 @@ document.querySelectorAll('.controlButton').forEach((btn) => {
     { passive: false },
   );
 });
-resetGame();
+// resetGame();
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
     resetGame();
@@ -191,7 +191,14 @@ function checkLocalStorageSettings() { // восстанавливаем нас�
   console.log(fieldColums, snakeSpeedMs, foodCount, transparentBorders);
 }
 
-// function setSizing() {}
+function setSizing() {
+  const dpr = window.devicePixelRatio;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  console.log(`dpr ${dpr} \nwidth ${width} \nheight ${height}`);
+  console.log(`resolution: \n${height * dpr}x${width * dpr}`); // разрешение получается дробным
+}
 
 function applySettings (e) { // применение настроек
   e.preventDefault();                     // не даём форме перезагружать страницу.

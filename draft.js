@@ -1,4 +1,4 @@
-// Допустим, logicalWidth = 500, devicePixelRatio = 2
+
 const canvas = document.querySelector('#gameBoard');
 canvas.width = 300 * 3;
 canvas.height = 300 * 3;
