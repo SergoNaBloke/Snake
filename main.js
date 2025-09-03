@@ -24,6 +24,7 @@ function cssVar(name) { // получение CSS-переменных
 
 const gameboard = document.querySelector('#gameBoard');
 const ctx = gameboard.getContext('2d');
+const header = document.querySelector('.gameHeader');
 const scoreText = document.querySelector('#scoreText');
 const resetBtn = document.querySelector('#resetBtn');
 const gameWidth = gameboard.width;
@@ -135,7 +136,6 @@ document.querySelectorAll('.controlButton').forEach((btn) => {
     { passive: false },
   );
 });
-// resetGame();
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Backspace') {
     resetGame();
@@ -196,8 +196,17 @@ function setSizing() {
   const width = window.innerWidth;
   const height = window.innerHeight;
 
-  console.log(`dpr ${dpr} \nwidth ${width} \nheight ${height}`);
-  console.log(`resolution: \n${height * dpr}x${width * dpr}`); // разрешение получается дробным
+  console.log(`${dpr} dpr \n${width} width \n${height} height`);
+  console.log(`resolution: \n${height * dpr} x ${width * dpr}`); // разрешение получается дробным
+  // сравнивать высоту (-хедер) с шириной
+
+  const gameboardStyles = window.getComputedStyle(gameboard); // получаем стили элементов
+
+  const rect = header.getBoundingClientRect(); // размеры хедера
+  const roundedHeight = Math.ceil(rect.height);  // высота хедера + округление вверх
+  
+  console.log("Высота с округлением вверх:", roundedHeight);  
+  console.log("Canvas border (px):", gameboardStyles.borderWidth); // сокращённое свойство
 }
 
 function applySettings (e) { // применение настроек
