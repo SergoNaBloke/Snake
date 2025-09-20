@@ -188,25 +188,38 @@ function checkLocalStorageSettings() { // восстанавливаем нас�
     transparentBorders = Boolean(cfg.transparentBorders);
   }
 
-  console.log(fieldColums, snakeSpeedMs, foodCount, transparentBorders);
+  // console.log(fieldColums, snakeSpeedMs, foodCount, transparentBorders);
+  console.log( `Settings: ${fieldColums}, ${snakeSpeedMs}, ${foodCount}, ${transparentBorders}`);
 }
 
 function setSizing() {
+  const gameboardStyles = window.getComputedStyle(gameboard); // получаем стили элементов
+  const rect = header.getBoundingClientRect(); // размеры хедера
+  const roundedHeaderHeight = Math.ceil(rect.height);  // высота хедера + округление вверх
+  
+  const borderWidth = parseInt(gameboardStyles.borderWidth, 10);
+  const extraPadding = 8;
+
   const dpr = window.devicePixelRatio;
   const width = window.innerWidth;
-  const height = window.innerHeight;
+  const height = window.innerHeight - 2 * roundedHeaderHeight;
+  const shorterMeasure = Math.min(width, height, 1200);
 
-  console.log(`${dpr} dpr \n${width} width \n${height} height`);
-  console.log(`resolution: \n${height * dpr} x ${width * dpr}`); // разрешение получается дробным
-  // сравнивать высоту (-хедер) с шириной
+  // console.log(`${dpr} dpr \n${width} width \n${height} height`);
+  // console.log(`resolution: \n${height * dpr} x ${width * dpr}`); // разрешение получается дробным
+  // console.log(shorterMeasure);
+  // console.log(borderWidth);
+  // console.log(shorterMeasure - borderWidth * 2 - extraPadding);
+  // console.log((shorterMeasure - borderWidth * 2 - extraPadding) / fieldColums);
 
-  const gameboardStyles = window.getComputedStyle(gameboard); // получаем стили элементов
+  const calculatedFieldSize = Math.floor((shorterMeasure - borderWidth * 2 - extraPadding) / fieldColums) * fieldColums;
 
-  const rect = header.getBoundingClientRect(); // размеры хедера
-  const roundedHeight = Math.ceil(rect.height);  // высота хедера + округление вверх
-  
-  console.log("Высота с округлением вверх:", roundedHeight);  
-  console.log("Canvas border (px):", gameboardStyles.borderWidth); // сокращённое свойство
+  console.log(calculatedFieldSize);
+
+  gameboard.style.width = calculatedFieldSize + "px";
+  gameboard.style.height = calculatedFieldSize + "px";
+  gameboard.width = calculatedFieldSize * dpr;
+  gameboard.height = calculatedFieldSize * dpr;
 }
 
 function applySettings (e) { // применение настроек
