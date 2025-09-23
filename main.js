@@ -4,7 +4,8 @@ const root = document.documentElement;
 const currentTheme = localStorage.getItem('theme') || 'light';
 root.setAttribute('data-theme', currentTheme);
 
-themeToggle.addEventListener('click', () => {  // переключение темы
+themeToggle.addEventListener('click', () => {
+  // переключение темы
   const newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
   root.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
@@ -18,7 +19,8 @@ themeToggle.addEventListener('click', () => {  // переключение те�
   }
 });
 
-function cssVar(name) { // получение CSS-переменных
+function cssVar(name) {
+  // получение CSS-переменных
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
@@ -47,7 +49,7 @@ let snake = [
   { x: 0, y: 0 },
 ];
 let foodCount = 1;
-let fieldColums = 16; 
+let fieldColums = 16;
 let snakeSpeedMs = 450;
 let transparentBorders = false;
 let tempFoodCount;
@@ -65,13 +67,15 @@ const foodSlider = document.getElementById('food-count');
 const foodValueEl = document.getElementById('food-count-value');
 const borderCheckbox = document.getElementById('border-type');
 
-openBtn.addEventListener('click', () => { // открытие оверлея
+openBtn.addEventListener('click', () => {
+  // открытие оверлея
   overlay.style.display = 'flex';
 });
 
-cancelBtn.addEventListener('click', () => { // закрытие оверлея
+cancelBtn.addEventListener('click', () => {
+  // закрытие оверлея
   overlay.style.display = 'none';
-  
+
   // Восстанавливаем интерфейс по сохранённым значениям
   foodSlider.value = foodCount;
   foodValueEl.textContent = foodCount;
@@ -80,7 +84,8 @@ cancelBtn.addEventListener('click', () => { // закрытие оверлея
   borderCheckbox.checked = transparentBorders;
 });
 
-overlay.addEventListener('click', (e) => { // слушаем клик по оверлею
+overlay.addEventListener('click', (e) => {
+  // слушаем клик по оверлею
   if (e.target === overlay) {
     cancelBtn.click(); // внутри cancelBtn уже скрывается overlay
   }
@@ -88,41 +93,42 @@ overlay.addEventListener('click', (e) => { // слушаем клик по ов�
 
 form.addEventListener('submit', applySettings); // применение настроек
 
-foodSlider.addEventListener('input', (e) => { // слушатель настроек еды
+foodSlider.addEventListener('input', (e) => {
+  // слушатель настроек еды
   foodValueEl.textContent = e.target.value; // live-обновление числа
   tempFoodCount = e.target.value; // обновляем глобальную переменную foodCount
   console.log(`Food count: ${tempFoodCount}`);
 });
 
-document.querySelectorAll('input[name="field-size"]').forEach((el) => { // слушатель размера поля
+document.querySelectorAll('input[name="field-size"]').forEach((el) => {
+  // слушатель размера поля
   el.addEventListener('change', (e) => {
     tempFieldColums = parseInt(e.target.value, 10); // присванивание размера поля в переменную
     console.log(`Field: ${tempFieldColums}`);
   });
 });
 
-document.querySelectorAll('input[name="snake-speed"]').forEach((el) => { // слушатель скорости змейки
+document.querySelectorAll('input[name="snake-speed"]').forEach((el) => {
+  // слушатель скорости змейки
   el.addEventListener('change', (e) => {
     tempSnakeSpeedMs = parseInt(e.target.value, 10);
     console.log(`Speed: ${tempSnakeSpeedMs} ms`);
   });
 });
 
-borderCheckbox.addEventListener('change', (e) => { // слушатель прозрачности границ
+borderCheckbox.addEventListener('change', (e) => {
+  // слушатель прозрачности границ
   tempTransparentBorders = e.target.checked;
   console.log(`Transparent borders: ${tempTransparentBorders}`);
 });
 
-
-
-
-window.addEventListener('DOMContentLoaded', () => { // события при загрузке
+window.addEventListener('DOMContentLoaded', () => {
+  // события при загрузке
   checkLocalStorageSettings();
-  setSizing();
   resetGame();
 });
 
-document.addEventListener("touchstart", function(){}, true);
+document.addEventListener('touchstart', function () {}, true);
 window.addEventListener('keydown', changeDirection);
 document.querySelectorAll('.controlButton').forEach((btn) => {
   // click для мыши, touchstart для тача
@@ -143,8 +149,8 @@ window.addEventListener('keydown', (e) => {
 });
 resetBtn.addEventListener('click', resetGame);
 
-
-function checkLocalStorageSettings() { // восстанавливаем настройки из localStorage
+function checkLocalStorageSettings() {
+  // восстанавливаем настройки из localStorage
   const raw = localStorage.getItem('snakeSettings');
   if (!raw) return;
 
@@ -158,7 +164,7 @@ function checkLocalStorageSettings() { // восстанавливаем нас�
   // Восстановление контролов
   if (cfg.fieldColums !== undefined) {
     const sizeRadio = document.querySelector(
-      `input[name="field-size"][value="${cfg.fieldColums}"]`
+      `input[name="field-size"][value="${cfg.fieldColums}"]`,
     );
     if (sizeRadio) sizeRadio.checked = true;
     fieldColums = Number(cfg.fieldColums);
@@ -166,7 +172,7 @@ function checkLocalStorageSettings() { // восстанавливаем нас�
 
   if (cfg.snakeSpeedMs !== undefined) {
     const speedRadio = document.querySelector(
-      `input[name="snake-speed"][value="${cfg.snakeSpeedMs}"]`
+      `input[name="snake-speed"][value="${cfg.snakeSpeedMs}"]`,
     );
     if (speedRadio) speedRadio.checked = true;
     snakeSpeedMs = Number(cfg.snakeSpeedMs);
@@ -189,14 +195,14 @@ function checkLocalStorageSettings() { // восстанавливаем нас�
   }
 
   // console.log(fieldColums, snakeSpeedMs, foodCount, transparentBorders);
-  console.log( `Settings: ${fieldColums}, ${snakeSpeedMs}, ${foodCount}, ${transparentBorders}`);
+  console.log(`Settings: ${fieldColums}, ${snakeSpeedMs}, ${foodCount}, ${transparentBorders}`);
 }
 
 function setSizing() {
   const gameboardStyles = window.getComputedStyle(gameboard); // получаем стили элементов
   const rect = header.getBoundingClientRect(); // размеры хедера
-  const roundedHeaderHeight = Math.ceil(rect.height);  // высота хедера + округление вверх
-  
+  const roundedHeaderHeight = Math.ceil(rect.height); // высота хедера + округление вверх
+
   const borderWidth = parseInt(gameboardStyles.borderWidth, 10);
   const extraPadding = 8;
 
@@ -208,19 +214,16 @@ function setSizing() {
   // console.log(`${dpr} dpr \n${width} width \n${height} height`);
   // console.log(`resolution: \n${height * dpr} x ${width * dpr}`); // разрешение получается дробным
 
-  const calculatedFieldSize = Math.floor((shorterMeasure - borderWidth * 2 - extraPadding) / fieldColums) * fieldColums;
+  const calculatedFieldSize =
+    Math.floor((shorterMeasure - borderWidth * 2 - extraPadding) / fieldColums) * fieldColums;
 
   console.log(calculatedFieldSize);
   console.log(fieldColums);
 
-  gameboard.style.width = calculatedFieldSize + "px";
-  gameboard.style.height = calculatedFieldSize + "px";
+  gameboard.style.width = calculatedFieldSize + 'px';
+  gameboard.style.height = calculatedFieldSize + 'px';
   gameboard.width = calculatedFieldSize * dpr;
   gameboard.height = calculatedFieldSize * dpr;
-
-  // ctx.setTransform(1, 0, 0, 1, 0, 0); // сброс на всякий случай
-  // ctx.scale(dpr, dpr);
-
 
   gameWidth = calculatedFieldSize * dpr;
   gameHeight = calculatedFieldSize * dpr;
@@ -229,15 +232,15 @@ function setSizing() {
   unitSize = (calculatedFieldSize / fieldColums) * dpr;
 }
 
-function applySettings (e) { // применение настроек
-  e.preventDefault();                     // не даём форме перезагружать страницу.
+function applySettings(e) {
+  e.preventDefault(); // не даём форме перезагружать страницу.
 
-  fieldColums = tempFieldColums;      // применяем выбранные настройки
-  snakeSpeedMs = tempSnakeSpeedMs;
-  foodCount = tempFoodCount;
-  transparentBorders = tempTransparentBorders;
+  fieldColums = tempFieldColums ?? fieldColums; // применяем выбранные настройки
+  snakeSpeedMs = tempSnakeSpeedMs ?? snakeSpeedMs;
+  foodCount = tempFoodCount ?? foodCount;
+  transparentBorders = tempTransparentBorders ?? transparentBorders;
 
-  const fd = new FormData(form);          // удобный сбор значений при submit.
+  const fd = new FormData(form); // удобный сбор значений при submit.
 
   const config = {
     fieldColums: parseInt(fd.get('field-size'), 10),
@@ -246,12 +249,13 @@ function applySettings (e) { // применение настроек
     transparentBorders: !!fd.get('border-type'),
   };
   overlay.style.display = 'none';
-  // запись настроек в localStorage
-  localStorage.setItem('snakeSettings', JSON.stringify(config));
-  resetGame()
+  localStorage.setItem('snakeSettings', JSON.stringify(config)); // запись настроек в localStorage
+  resetGame();
 }
 
 function resetGame() {
+  setSizing();
+
   clearTimeout(gameTimerId);
 
   score = 0;
@@ -288,7 +292,7 @@ function nextTick() {
     } else {
       displayGameOver();
     }
-    console.log(snakeSpeedMs)
+    // console.log(snakeSpeedMs)
   }, snakeSpeedMs);
 }
 
