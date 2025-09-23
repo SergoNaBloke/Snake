@@ -27,9 +27,9 @@ const ctx = gameboard.getContext('2d');
 const header = document.querySelector('.gameHeader');
 const scoreText = document.querySelector('#scoreText');
 const resetBtn = document.querySelector('#resetBtn');
-const gameWidth = gameboard.width;
-const gameHeight = gameboard.height;
-const unitSize = 25;
+let gameWidth;
+let gameHeight;
+let unitSize;
 let running = false;
 let gameTimerId;
 let xVelocity = unitSize;
@@ -207,19 +207,26 @@ function setSizing() {
 
   // console.log(`${dpr} dpr \n${width} width \n${height} height`);
   // console.log(`resolution: \n${height * dpr} x ${width * dpr}`); // разрешение получается дробным
-  // console.log(shorterMeasure);
-  // console.log(borderWidth);
-  // console.log(shorterMeasure - borderWidth * 2 - extraPadding);
-  // console.log((shorterMeasure - borderWidth * 2 - extraPadding) / fieldColums);
 
   const calculatedFieldSize = Math.floor((shorterMeasure - borderWidth * 2 - extraPadding) / fieldColums) * fieldColums;
 
   console.log(calculatedFieldSize);
+  console.log(fieldColums);
 
   gameboard.style.width = calculatedFieldSize + "px";
   gameboard.style.height = calculatedFieldSize + "px";
   gameboard.width = calculatedFieldSize * dpr;
   gameboard.height = calculatedFieldSize * dpr;
+
+  // ctx.setTransform(1, 0, 0, 1, 0, 0); // сброс на всякий случай
+  // ctx.scale(dpr, dpr);
+
+
+  gameWidth = calculatedFieldSize * dpr;
+  gameHeight = calculatedFieldSize * dpr;
+
+  console.log(calculatedFieldSize / fieldColums);
+  unitSize = (calculatedFieldSize / fieldColums) * dpr;
 }
 
 function applySettings (e) { // применение настроек
@@ -423,7 +430,7 @@ function checkGameOver() {
 }
 
 function displayGameOver() {
-  ctx.font = '50px MV Boli';
+  ctx.font = '120px MV Boli';
   ctx.fillStyle = cssVar('--text-color');
   ctx.textAlign = 'center';
   ctx.fillText('GAME OVER!', gameWidth / 2, gameHeight / 2);

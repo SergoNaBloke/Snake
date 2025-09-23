@@ -145,11 +145,11 @@ button {
   height: 1000px; */
 }
 
-canvas {
+/* canvas {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   -ms-interpolation-mode: nearest-neighbor;
-}
+} */
 
 
 
