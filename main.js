@@ -328,10 +328,26 @@ function drawFood() {
 function moveSnake() {
   yVelocity = nextYVelocity;
   xVelocity = nextXVelocity;
-  const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
-  snake.unshift(head);
-  // if food is eaten
+  let head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
+
+  if (transparentBorders) {
+    // телепортация через стены
+    if (head.x < 0) {
+      head.x = gameWidth - unitSize;
+    } else if (head.x >= gameWidth) {
+      head.x = 0;
+    }
+    if (head.y < 0) {
+      head.y = gameHeight - unitSize;
+    } else if (head.y >= gameHeight) {
+      head.y = 0;
+    }
+  }
+  snake.unshift(head); // добавляем новую голову в начало змейки
+  // console.log(head);
+
   if (snake[0].x === foodX && snake[0].y === foodY) {
+    // if food is eaten
     score += 1;
     scoreText.textContent = score;
     createFood();
@@ -412,19 +428,21 @@ function touchDirectionHandler(e) {
 }
 
 function checkGameOver() {
-  switch (true) {
-    case snake[0].x < 0:
-      running = false;
-      break;
-    case snake[0].x >= gameWidth:
-      running = false;
-      break;
-    case snake[0].y < 0:
-      running = false;
-      break;
-    case snake[0].y >= gameHeight:
-      running = false;
-      break;
+  if (!transparentBorders) {
+    switch (true) {
+      case snake[0].x < 0:
+        running = false;
+        break;
+      case snake[0].x >= gameWidth:
+        running = false;
+        break;
+      case snake[0].y < 0:
+        running = false;
+        break;
+      case snake[0].y >= gameHeight:
+        running = false;
+        break;
+    }
   }
   for (let i = 1; i < snake.length; i++) {
     if (snake[i].x == snake[0].x && snake[i].y === snake[0].y) {
