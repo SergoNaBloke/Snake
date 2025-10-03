@@ -38,8 +38,7 @@ let xVelocity = unitSize;
 let yVelocity = 0;
 let nextXVelocity = xVelocity;
 let nextYVelocity = yVelocity;
-let foodX;
-let foodY;
+let foods = [];
 let score = 0;
 let snake = [
   { x: unitSize * 4, y: 0 },
@@ -307,22 +306,28 @@ function createFood() {
     return randomNum;
   }
 
-  let newX, newY;
+  // foods = []; // очищаем и пересоздаём
 
-  // Генерируем до тех пор, пока не найдём свободную клетку
-  do {
-    newX = randomFood(0, gameWidth - unitSize);
-    newY = randomFood(0, gameHeight - unitSize);
-    // snake.some вернёт true, если хоть один сегмент совпадает с (newX, newY)
-  } while (snake.some((segment) => segment.x === newX && segment.y === newY));
+  while (foods.length < foodCount) {
+    let newX = randomFood(0, gameWidth - unitSize);
+    let newY = randomFood(0, gameHeight - unitSize);
 
-  foodX = newX;
-  foodY = newY;
+    if (
+      !snake.some((segment) => segment.x === newX && segment.y === newY) &&
+      !foods.some((food) => food.x === newX && food.y === newY)
+    ) {
+      foods.push({ x: newX, y: newY });
+    }
+  }
+  console.log(foods);
+  console.log(snake);
 }
 
 function drawFood() {
   ctx.fillStyle = cssVar('--food-color');
-  ctx.fillRect(foodX, foodY, unitSize, unitSize);
+  foods.forEach((food) => {
+    ctx.fillRect(food.x, food.y, unitSize, unitSize);
+  });
 }
 
 function moveSnake() {
@@ -346,7 +351,7 @@ function moveSnake() {
   snake.unshift(head); // добавляем новую голову в начало змейки
   // console.log(head);
 
-  if (snake[0].x === foodX && snake[0].y === foodY) {
+  if (foods.some((food) => food.x === snake[0].x && food.y === snake[0].y)) {
     // if food is eaten
     score += 1;
     scoreText.textContent = score;
