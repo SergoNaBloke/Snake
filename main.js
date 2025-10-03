@@ -269,6 +269,7 @@ function resetGame() {
     { x: unitSize * 1, y: 0 },
     { x: 0, y: 0 },
   ];
+  foods = [];
   running = true;
   scoreText.textContent = score;
   clearBoard();
@@ -306,8 +307,6 @@ function createFood() {
     return randomNum;
   }
 
-  // foods = []; // очищаем и пересоздаём
-
   while (foods.length < foodCount) {
     let newX = randomFood(0, gameWidth - unitSize);
     let newY = randomFood(0, gameHeight - unitSize);
@@ -319,8 +318,6 @@ function createFood() {
       foods.push({ x: newX, y: newY });
     }
   }
-  console.log(foods);
-  console.log(snake);
 }
 
 function drawFood() {
@@ -351,10 +348,12 @@ function moveSnake() {
   snake.unshift(head); // добавляем новую голову в начало змейки
   // console.log(head);
 
-  if (foods.some((food) => food.x === snake[0].x && food.y === snake[0].y)) {
+  const eatenFoodIndex = foods.findIndex((food) => food.x === snake[0].x && food.y === snake[0].y);
+  if (eatenFoodIndex !== -1) {
     // if food is eaten
     score += 1;
     scoreText.textContent = score;
+    foods.splice(eatenFoodIndex, 1); // удаляем съеденную еду
     createFood();
   } else {
     snake.pop(); // remove the last part of the snake if food is not eaten
