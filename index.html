@@ -112,7 +112,7 @@
           <h2>Settings</h2>
           <!-- FIELD SIZE: Toggle Buttons -->
           <div class="form-group">
-            <label>Field size</label>
+            <label class="settings-label">Field size</label>
             <div class="toggle-button-group" id="field-size-group">
               <input type="radio" name="field-size" id="fs-small" value="10" />
               <label for="fs-small" class="toggle-button">Small</label>
@@ -126,7 +126,7 @@
           </div>
           <!-- SNAKE SPEED: Toggle Buttons -->
           <div class="form-group">
-            <label>Snake speed</label>
+            <label class="settings-label">Snake speed</label>
             <div class="toggle-button-group" id="snake-speed-group">
               <input type="radio" name="snake-speed" id="ss-slow" value="600" />
               <label for="ss-slow" class="toggle-button">Slow</label>
@@ -140,12 +140,14 @@
           </div>
           <!-- FOOD COUNT: Slider -->
           <div class="form-group">
-            <label for="food-count">Food count: <span id="food-count-value">1</span></label>
+            <label for="food-count" class="settings-label"
+              >Food count: <span id="food-count-value">1</span></label
+            >
             <input type="range" id="food-count" name="food-count" min="1" max="10" value="1" />
           </div>
           <!-- TRANSPARENT BORDERS: Toggle Switch -->
-          <div class="form-group">
-            <label for="border-type">Transparent borders</label>
+          <div class="form-group toggle-switch-group">
+            <label for="border-type" class="settings-label">Transparent borders</label>
             <label class="toggle-switch">
               <input type="checkbox" id="border-type" name="border-type" />
               <span class="switch-slider"></span>
@@ -207,8 +209,6 @@
     </div>
   </body>
 
-  <!-- <script src="mainOLD.js"></script> -->
   <!-- <script src="draft.js"></script> -->
   <script src="main.js"></script>
-  <!-- <script src="settings.js"></script> -->
 </html>

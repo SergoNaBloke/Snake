@@ -1,7 +1,7 @@
 const themeToggle = document.querySelector('#themeToggle');
 const root = document.documentElement;
 
-const currentTheme = localStorage.getItem('theme') || 'light';
+const currentTheme = localStorage.getItem('theme') || 'dark';
 root.setAttribute('data-theme', currentTheme);
 
 themeToggle.addEventListener('click', () => {
@@ -456,7 +456,7 @@ function checkGameOver() {
 }
 
 function displayGameOver() {
-  ctx.font = '120px MV Boli';
+  ctx.font = '120px "Roboto", sans-serif';
   ctx.fillStyle = cssVar('--text-color');
   ctx.textAlign = 'center';
   ctx.fillText('GAME OVER!', gameWidth / 2, gameHeight / 2);

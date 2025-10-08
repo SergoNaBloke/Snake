@@ -16,6 +16,11 @@ html {
   --snake-color: lightgreen;
   --snake-border: black;
   --food-color: #ff3214;
+
+  --sttn-btn-color: rgb(200, 200, 200);
+  --sttn-btn-color-hover: rgb(220, 220, 220);
+  --sttn-btn-color-active: rgb(230, 230, 230);
+  --sttn-thumb-color: rgb(150, 150, 150);
 }
 
 :root[data-theme='dark'] {
@@ -30,6 +35,11 @@ html {
   --snake-color: #4caf50;
   --snake-border: #000000;
   --food-color: #ff5722;
+
+  --sttn-btn-color: rgb(95, 95, 95);
+  --sttn-btn-color-hover: rgb(70, 70, 70);
+  --sttn-btn-color-active: rgb(50, 50, 50);
+  --sttn-thumb-color: rgb(50, 50, 50);
 }
 
 *,
@@ -62,14 +72,6 @@ button {
   }
 }
 
-
-
-
-
-
-
-
-
 .gameHeader {
   display: flex;
   justify-content: space-between;
@@ -101,22 +103,22 @@ button {
   cursor: pointer;
   color: var(--text-color);
   background-color: var(--btn-color);
-  
 }
 
-.sun-icon { display: inline-block; }
-.moon-icon { display: none; }
+.sun-icon {
+  display: inline-block;
+}
+.moon-icon {
+  display: none;
+}
 
 /* Когда тема тёмная — наоборот */
-[data-theme="dark"] .sun-icon { display: none; }
-[data-theme="dark"] .moon-icon { display: inline-block; }
-
-
-
-
-
-
-
+[data-theme='dark'] .sun-icon {
+  display: none;
+}
+[data-theme='dark'] .moon-icon {
+  display: inline-block;
+}
 
 #gameContainer {
   display: flex;
@@ -143,14 +145,6 @@ button {
   -ms-interpolation-mode: nearest-neighbor;
 } */
 
-
-
-
-
-
-
-
-
 #bottomButtonsWrapper {
   width: calc(500px + 0.5rem);
   max-width: 100%;
@@ -173,17 +167,6 @@ button {
   color: var(--text-color);
   background-color: var(--btn-color);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 #controlButtonsWrapper {
   gap: 1rem;
